@@ -115,4 +115,4 @@ This adata.obs['marker_label'] stores the pre-annotation purely based on the mar
 * `d_coef`: The coefficient of discriminator loss in the overall loss. Higher value means stronger mixing. *Default*: `0.2`.
 * `kl_coef`: kl divergence proportion in the VAE loss. *Default*: `0.005`. Sometimes drop it to 0.0005 or 0.0001 to achieve better cell conservation.
 * `tau_e`: Parameters that can be adjusted to make the prediction less confident. If it is lower, more cells will be annotated as unknown in Predict_label. You can keep the temperature here to be stable and adjust the tau_e if you are not satisfied with the prediction confidence.
-* 'threshold': The threshold for the permutation test is also to evaluate whether you have enough confidence to pre-annotate this cells. The pre-annotated results is store in adata.obs['marker_label']
+* `threshold`: The threshold for the permutation test is also to evaluate whether you have enough confidence to pre-annotate this cells. The pre-annotated results is store in adata.obs['marker_label']
