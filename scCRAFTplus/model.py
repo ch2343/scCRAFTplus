@@ -13,6 +13,14 @@ import anndata
 import pandas as pd
 from typing import List
 import time
+import sys
+
+# Dynamic import of tqdm based on the environment
+if 'ipykernel' in sys.modules:
+    from tqdm.notebook import tqdm
+else:
+    from tqdm import tqdm
+    
 from scCRAFTplus.networks import *
 from scCRAFTplus.utils import *
     
