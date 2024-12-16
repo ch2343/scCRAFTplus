@@ -5,6 +5,7 @@ import scipy.sparse
 import random
 import anndata
 import pandas as pd
+import torch
 from itertools import combinations
 from torch.distributions import Normal, kl_divergence as kl
 from torch.utils.data import DataLoader, TensorDataset,Dataset
