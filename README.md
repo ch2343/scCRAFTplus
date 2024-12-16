@@ -93,7 +93,7 @@ print(f"Training completed in {training_time:.2f} seconds")
 sc.pp.highly_variable_genes(adata, n_top_genes=2000, batch_key='batch')
 adata = adata[:, adata.var['highly_variable']]
 ```
-Then scCRAFT performed the clustering, training and embedding obtaining.
+Then scCRAFT+ performed the clustering, training and embedding obtaining.
 ```python
 multi_resolution_cluster(adata, resolution1 = 0.5, method = 'Leiden')
 VAE, C = train_integration_model(adata, batch_key = 'batch', z_dim=50, epochs = 150,  d_coef = 0.2, kl_coef = 0.005, warmup_epoch = 50, hard_label = False)
@@ -107,7 +107,7 @@ This adata.obs['marker_label'] stores the pre-annotation purely based on the mar
 
 
 
-#### Parameters in `scCRAFT training`:
+#### Parameters in `scCRAFT+ training`:
 * `method`: Method of the clustering. 'Leiden' will take more time but might provide more accurate result. *Default*: `Louvain`.
 * `resolution1`: Coefficient of the low resolution clustering. A higher low resolution might separate same cell type. *Default*: `0.5`.
 * `epochs`: Number of steps for training. *Default*: `150`. Use `epochs=50` for datasets with batch number over 80. (Drop this manually if even more batches)
