@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='scCRAFT+',
+    name='scCRAFTplus',
     version='1.0.0',
     author='Chuan He',
     author_email='ch2343@yale.edu',
@@ -17,7 +17,7 @@ setup(
         'jax',
         'matplotlib'  # Assume dependencies based on your initial code
     ],
-    url='http://pypi.python.org/pypi/scCRAFT+/',
+    url='http://pypi.python.org/pypi/scCRAFTplus/',
     license='LICENSE.txt',
     description='An package for single-cell data integration with additional label using deep learning.',
     long_description=open('README.md').read(),
