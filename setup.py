@@ -10,12 +10,15 @@ setup(
         'torch',
         'scanpy',
         'numpy',
+        'tqdm',
         'umap-learn',
         'scipy',
         'pandas',
-        'sklearn',
+        'scikit-learn',
         'jax',
-        'matplotlib'  # Assume dependencies based on your initial code
+        'matplotlib',
+        'anndata',
+        'scib'
     ],
     url='http://pypi.python.org/pypi/scCRAFTplus/',
     license='LICENSE.txt',
