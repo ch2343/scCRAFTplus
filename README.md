@@ -14,7 +14,7 @@ Normally the installation time is less than 5 minutes.
 
 ## Quick Start
 ### Scenario One: Partially or Fully annotated cells
-**This scenarios is when you have partially annotated cells that you have fully confidence. For example, you have one or a few large dataset with well-curated annotation and you want to transfer those annotation to other batches or samples.**
+**This scenario applies when you have partially annotated cells with high-confidence labels. For example, it is suitable when working with one or more large datasets with well-curated annotations that you wish to transfer to other batches or samples.**
 
 Starting with raw count matrices formatted as AnnData objects, scCRAFT+ uses a standard pipline adopted by Seurat and Scanpy to preprocess data.
 ```python
@@ -64,7 +64,7 @@ sc.pl.umap(adata, color=["batch", "celltype", "Predict_label"], frameon=False, n
 The evaluating procedure `obtain_embeddings()` saves the integrated latent representation of cells in `adata.obsm['X_scCRAFT']` directly, which can be used for downstream integrative analysis. The adata.obs["Predict_label"] is the reliable prediction of cell types from the algorithm.
 
 ### Scenario Two: Without information of cell type labels
-**This is when you do not have any additional information about cell types. You can always adopt this algorithm to improve the integration performance even if the markers for the tissue is not among the list (you can try PBMC markers instead).**
+**This scenario is applicable when no additional cell type information is available. The algorithm can still improve integration performance, even in the absence of tissue-specific markers. In such cases, alternative marker sets, such as those for PBMCs, can be effectively utilized.**
 
 Similarly from the anndata matrices, we perform the traditional analysis pipeline to preprocess the data.
 We perform the auto-annotation based on the marker lists. We have predefine our marker list from Azimuth for users for different tissues.
