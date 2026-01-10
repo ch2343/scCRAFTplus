@@ -85,7 +85,6 @@ sc.pp.log1p(adata)
 ranks = rank_genes(adata, markers_PBMC_l3)
 start_time = time.time()
 process_cell_types_with_ranks(adata, markers_PBMC_l3, ranks)
-perform_permutation_tests(adata, markers_PBMC_l3, ranks, threshold = 0.05, n_permutations=100, temperature=1)
 # End timer
 end_time = time.time()
 training_time = end_time - start_time
