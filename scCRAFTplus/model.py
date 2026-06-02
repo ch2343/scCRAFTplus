@@ -91,8 +91,7 @@ class SCIntegrationModel(nn.Module):
                     if hard_label:
                         x, v, labels_low, labels_high, l = data
                     else:
-                        x, v, i, labels_low, labels_high, u = data
-                        i = i.to(self.device)
+                        x, v, labels_low, labels_high, u = data
                     x = x.to(self.device)
                     v = v.to(self.device)
                     labels_low = labels_low.to(self.device)
@@ -121,7 +120,7 @@ class SCIntegrationModel(nn.Module):
                     if hard_label:
                         classifier_loss,_ = self.C(z, l = l, hard_label = True)
                     else:
-                        classifier_loss,_ = self.C(z, u = u, i = i, hard_label = False)
+                        classifier_loss,_ = self.C(z, u = u, hard_label = False)
                     
                     optimizer_G_C.zero_grad()
                     loss_DA = self.D_Z(z, v_true, generator = False)
