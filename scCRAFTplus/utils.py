@@ -12,8 +12,6 @@ from torch.utils.data import DataLoader, TensorDataset,Dataset
 
 
 
-
-
 def weights_init_normal(m):
     classname = m.__class__.__name__
     # Skip if it's an instance of _DomainSpecificBatchNorm  
@@ -83,7 +81,6 @@ def generate_balanced_dataloader(adata, batch_size, batch_key='batch'):
     unique_batches = adata.obs[batch_key].unique()
         
     batch_to_int = {batch: i for i, batch in enumerate(unique_batches)}
-    celltypeindicator = adata.obs['unknown_label'].cat.codes.values
     unsupervised_labels1 = adata.obs['leiden1'].cat.codes.values
     unsupervised_labels2 = adata.obs['leiden2'].cat.codes.values
     # Separate the dataset by batches and sample indices
@@ -119,12 +116,11 @@ def generate_balanced_dataloader(adata, batch_size, batch_key='batch'):
     U_scores_tensor = torch.tensor(U_scores_sampled, dtype=torch.float32)
     # Convert batch labels to tensor
     v_tensor = torch.tensor(batch_labels_list, dtype=torch.int64)
-    i_tensor = torch.tensor(celltypeindicator[batch_indices], dtype=torch.int64)
     label_tensor1 = torch.tensor(unsupervised_labels1[batch_indices], dtype=torch.int64)
     label_tensor2 = torch.tensor(unsupervised_labels2[batch_indices], dtype=torch.int64)
     
     # Create a TensorDataset and DataLoader
-    combined_dataset = TensorDataset(X_tensor, v_tensor, i_tensor, label_tensor1, label_tensor2, U_scores_tensor)
+    combined_dataset = TensorDataset(X_tensor, v_tensor, label_tensor1, label_tensor2, U_scores_tensor)
     dataloader = DataLoader(combined_dataset, batch_size=batch_size * 2, shuffle=True)
     
     return dataloader
