@@ -245,13 +245,6 @@ class Classifier(nn.Module):
                 u = torch.softmax(u, dim=1)
                 u = u**(1/t)
                 u_labels = u / u.sum(dim=1, keepdim=True)
-                valid_indices = (i == 0)
-
-                if not valid_indices.any():
-                    return torch.tensor(0.0, device=logits.device)
-
-                #u_labels_filtered = u_labels[valid_indices]
-                #logits_filtered = logits[valid_indices]
             
                 cross_entropy_loss = F.cross_entropy(logits, u_labels)
                 vat_loss_value = self.compute_vat_loss(x, logits)  # Pass logits to VAT loss computation
