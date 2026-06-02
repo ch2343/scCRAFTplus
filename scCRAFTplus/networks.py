@@ -234,7 +234,7 @@ class Classifier(nn.Module):
         self.eps = eps
         self.num_iters = num_iters
 
-    def forward(self, x, u=None, i=None, l=None, t=0.05, vat_coef=1, train=True, hard_label=False):
+    def forward(self, x, u=None, l=None, t=0.05, vat_coef=1, train=True, hard_label=False):
         logits = self.compute_logits(x)
         if train:
             if hard_label:
@@ -254,7 +254,7 @@ class Classifier(nn.Module):
                 #logits_filtered = logits[valid_indices]
             
                 cross_entropy_loss = F.cross_entropy(logits, u_labels)
-                vat_loss_value = self.compute_vat_loss_filter(x, logits, i)  # Pass logits to VAT loss computation
+                vat_loss_value = self.compute_vat_loss(x, logits)  # Pass logits to VAT loss computation
                 total_loss = cross_entropy_loss + vat_coef * vat_loss_value
         else:
             total_loss = 0
@@ -272,10 +272,6 @@ class Classifier(nn.Module):
         vat_loss_value = vat_loss(self, x, logit, self.xi, self.eps, self.num_iters)
         return vat_loss_value
 
-    def compute_vat_loss_filter(self, x, logit, i):
-        # Use the passed logits for VAT calculation
-        vat_loss_value = vat_loss_filter(self, x, logit, i, self.xi, self.eps, self.num_iters)
-        return vat_loss_value
 
     def compute_cross_entropy_loss(self, logits, labels):
         # Filter out entries with placeholder label (-1) used for NaN
@@ -316,42 +312,6 @@ def vat_loss(model, x, original_logits, xi, eps, num_iters):
     perturbed_x = x + r_adv
     perturbed_logits = model.compute_logits(perturbed_x)
     vat_loss_value = kl_div_with_logit(original_logits.detach(), perturbed_logits)
-
-    return vat_loss_value
-
-def vat_loss_filter(model, x, logits,i, xi=1e-6, eps=10.0, num_iters=1, temperature=0.5, tau_e=-1):
-    # Compute the energy
-    energies = -temperature * torch.logsumexp(logits / temperature, dim=1)
-
-    # Check if the energies are below the threshold
-    #valid_indices = energies < tau_e
-    #valid_indices = (energies < tau_e) | (i == 0)
-    valid_indices = (i == 0)
-    
-    if not valid_indices.any():
-        return torch.tensor(0.0, device=logits.device)
-
-    # Apply VAT only to data points where energy is below the threshold
-    x_filtered = x[valid_indices]
-    logits_filtered = logits[valid_indices]
-
-    d = torch.rand_like(x_filtered).sub(0.5)
-    d = _l2_normalize(d)
-
-    for _ in range(num_iters):
-        d.requires_grad_()
-        perturbed_x = x_filtered.detach() + xi * d
-        perturbed_logits = model.compute_logits(perturbed_x)
-        kl_div = kl_div_with_logit(logits_filtered.detach(), perturbed_logits)
-        kl_div.backward()
-        grad_d = d.grad.data 
-        d = _l2_normalize(d.grad.data)
-        d = d.clone().detach().requires_grad_(True)
-
-    r_adv = eps * d
-    perturbed_x = x_filtered + r_adv
-    perturbed_logits = model.compute_logits(perturbed_x)
-    vat_loss_value = kl_div_with_logit(logits_filtered.detach(), perturbed_logits)
 
     return vat_loss_value
     
